@@ -6,3 +6,11 @@ export const Container = styled.aside`
   height: 100vh;
   overflow-y: auto;
 `;
+
+export const Search = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #FFFFFF;
+  padding: 16px;
+`;
