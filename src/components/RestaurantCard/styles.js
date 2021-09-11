@@ -33,5 +33,13 @@ export const Address = styled.span`
   color: ${(props) => props.theme.colors.text};
   font-size: 16px;
   line-height: 19px;
+  margim-top: 10px;
   margin-bottom: 10px;
+`;
+
+export const RestaurantPhoto = styled.img`
+  width: 100px;
+  heigth: 100px;
+  object-fit: cover;
+  border-radius: 6px;
 `;
