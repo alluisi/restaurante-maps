@@ -8,13 +8,34 @@ export const MapContainer = (props) => {
   const dispatch = useDispatch();
   const [map, setMap] = useState(null);
   const { restaurants } = useSelector((state) => state.restaurants);
-  const { google, query } = props;
+  const { google, query, placeId } = props;
 
   useEffect(() => {
     if (query) {
       searchByQuery(query);
     }
   }, [query]);
+
+  useEffect(() => {
+    if (placeId) {
+      getRestaurantById(placeId);
+    }
+  }, [placeId]);
+
+  function getRestaurantById(placeId) {
+    const service = new google.maps.places.PlacesService(map);
+
+    const request = {
+      placeId,
+      fields: ['name', 'opening_hours', 'formatted_address', 'formatted_phone_number']
+    };
+
+    service.getDetails(request, (place, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        dispatch(setRestaurant(place));
+      }
+    });
+  }
 
   function searchByQuery(query) {
     const service = new google.maps.places.PlacesService(map);
@@ -23,7 +44,7 @@ export const MapContainer = (props) => {
       location: map.center,
       radius: '200',
       type: ['restaurant'],
-      query,
+      query
     };
 
     service.textSearch(request, (results, status) => {
@@ -39,7 +60,7 @@ export const MapContainer = (props) => {
     const request = {
       location: center,
       radius: '20000',
-      type: ['restaurant'],
+      type: ['restaurant']
     };
 
     service.nearbySearch(request, (results, status) => {
@@ -60,6 +81,7 @@ export const MapContainer = (props) => {
       centerAroundCurrentLocation
       onReady={onMapReady}
       onRecenter={onMapReady}
+      {...props}
     >
       {restaurants.map((restaurant) => (
         <Marker
@@ -77,5 +99,5 @@ export const MapContainer = (props) => {
 
 export default GoogleApiWrapper({
   apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-  language: 'pt-BR',
+  language: 'pt-BR'
 })(MapContainer);
