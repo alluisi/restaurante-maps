@@ -24,7 +24,7 @@ const Home = () => {
         <Wrapper>
             <Container>
                 <Search>
-                    <Logo src={logo} alt='logo do restaurante' />
+                    <Logo src={logo} alt="logo do restaurante" />
                     <TextField
                         label="Pesquisar Restaurante"
                         outlined
@@ -36,10 +36,10 @@ const Home = () => {
                     </TextField>
                     <CarouselTitle>Na sua área</CarouselTitle>
                     <Carousel {...settings}>
-                        <Card photo={restaurante} />
-                        <Card photo={restaurante} />
-                        <Card photo={restaurante} />
-                        <Card photo={restaurante} />
+                        <Card photo={restaurante} title="Nome do Restaurante" />
+                        <Card photo={restaurante} title="Nome do Restaurante" />
+                        <Card photo={restaurante} title="Nome do Restaurante" />
+                        <Card photo={restaurante} title="Nome do Restaurante" />
                     </Carousel>
                 </Search >
             </Container >
