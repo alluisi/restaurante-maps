@@ -4,12 +4,13 @@ import MaterialIcon from '@material/react-material-icon';
 
 import logo from '../../assets/logo.svg';
 import restaurante from '../../assets/restaurante-fake.png';
-import { Card, RestaurantCard } from '../../components/index';
+import { Card, RestaurantCard, Modal } from '../../components/index';
 
 import { Container, Carousel, Search, Logo, Wrapper, Map, CarouselTitle } from './styles';
 
 const Home = () => {
     const [inputValue, setInputValue] = useState('');
+    const [modalOpend, setModalOpend] = useState(false);
 
     const settings = {
         dots: false,
@@ -45,6 +46,7 @@ const Home = () => {
                 <RestaurantCard />
             </Container >
             <Map />
+            <Modal open={modalOpend} onClose={() => setModalOpend(!modalOpend)} />
         </Wrapper>
     )
 };
