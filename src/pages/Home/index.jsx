@@ -5,7 +5,7 @@ import MaterialIcon from '@material/react-material-icon';
 
 import logo from '../../assets/logo.svg';
 import restaurante from '../../assets/restaurante-fake.png';
-import { Card, RestaurantCard, Modal, Map } from '../../components/index';
+import { Card, RestaurantCard, Modal, Map, Loader } from '../../components/index';
 
 import {
     Container,
@@ -61,12 +61,18 @@ const Home = () => {
                             onChange={(e) => setInputValue(e.target.value)}
                         />
                     </TextField>
-                    <CarouselTitle>Na sua área</CarouselTitle>
-                    <Carousel {...settings}>
-                        {restaurants.map((restaurant) => (
-                            <Card key={restaurant.place_id} photo={restaurant.photos ? restaurant.photo[0].setUrl() : restaurante} />
-                        ))}
-                    </Carousel>
+                    {restaurants.length > 0 ? (
+                        <>
+                            <CarouselTitle>Na sua área</CarouselTitle>
+                            <Carousel {...settings}>
+                                {restaurants.map((restaurant) => (
+                                    <Card key={restaurant.place_id} photo={restaurant.photos ? restaurant.photo[0].setUrl() : restaurante} />
+                                ))}
+                            </Carousel>
+                        </>
+                    ) : (
+                        <Loader />
+                    )}
                 </Search >
                 {restaurants.map((restaurant) => (
                     <RestaurantCard
