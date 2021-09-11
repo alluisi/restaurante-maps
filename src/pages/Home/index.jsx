@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import TextField, { Input } from '@material/react-text-field';
 import MaterialIcon from '@material/react-material-icon';
 
@@ -12,6 +13,7 @@ const Home = () => {
     const [inputValue, setInputValue] = useState('');
     const [query, setQuery] = useState(null);
     const [modalOpend, setModalOpend] = useState(false);
+    const { restaurants } = useSelector((state) => state.restaurants);
 
     const settings = {
         dots: false,
@@ -45,13 +47,14 @@ const Home = () => {
                     </TextField>
                     <CarouselTitle>Na sua área</CarouselTitle>
                     <Carousel {...settings}>
-                        <Card photo={restaurante} title="Nome do Restaurante" />
-                        <Card photo={restaurante} title="Nome do Restaurante" />
-                        <Card photo={restaurante} title="Nome do Restaurante" />
-                        <Card photo={restaurante} title="Nome do Restaurante" />
+                        {restaurants.map((restaurant) => (
+                            <Card key={restaurant.place_id} photo={restaurant.photos ? restaurant.photo[0].setUrl() : restaurante} />
+                        ))}
                     </Carousel>
                 </Search >
-                <RestaurantCard />
+                {restaurants.map((restaurant) => (
+                    <RestaurantCard restaurant={restaurant} />
+                ))}
             </Container >
             <Map query={query} />
             {/* <Modal open={modalOpend} onClose={() => setModalOpend(!modalOpend)} /> */}
