@@ -5,7 +5,14 @@ import MaterialIcon from '@material/react-material-icon';
 
 import logo from '../../assets/logo.svg';
 import restaurante from '../../assets/restaurante-fake.png';
-import { Card, RestaurantCard, Modal, Map, Loader } from '../../components/index';
+import {
+    Card,
+    RestaurantCard,
+    Modal,
+    Map,
+    Loader,
+    Skeleton
+} from '../../components/index';
 
 import {
     Container,
@@ -85,10 +92,25 @@ const Home = () => {
             <Modal
                 open={modalOpened}
                 onClose={() => setModalOpend(!modalOpened)}>
-                <ModalTitle>{restaurantSelected?.name}</ModalTitle>
-                <ModalContent>{restaurantSelected?.formatted_phone_number}</ModalContent>
-                <ModalContent>{restaurantSelected?.formatted_address}</ModalContent>
-                <ModalContent>{restaurantSelected?.opening_hours?.open_now ? 'Aberto agora :-)' : 'Fechado neste momento :-('}</ModalContent>
+                {restaurantSelected ? (
+                    <>
+                        <ModalTitle>{restaurantSelected?.name}</ModalTitle>
+                        <ModalContent>{restaurantSelected?.formatted_phone_number}</ModalContent>
+                        <ModalContent>{restaurantSelected?.formatted_address}</ModalContent>
+                        <ModalContent>
+                            {restaurantSelected?.opening_hours?.open_now
+                                ? 'Aberto agora :-)'
+                                : 'Fechado neste momento :-('}
+                        </ModalContent>
+                    </>
+                ) : (
+                    <>
+                        <Skeleton width='10px' heigth='10px' />
+                        <Skeleton width='10px' heigth='10px' />
+                        <Skeleton width='10px' heigth='10px' />
+                        <Skeleton width='10px' heigth='10px' />
+                    </>
+                )}
             </Modal>
         </Wrapper>
     )
