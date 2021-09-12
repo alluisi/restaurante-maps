@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GoogleApiWrapper, Map, Marker } from 'google-maps-react';
 
@@ -10,51 +10,57 @@ export const MapContainer = (props) => {
   const { restaurants } = useSelector((state) => state.restaurants);
   const { google, query, placeId } = props;
 
+  const getRestaurantById = useCallback(
+    (placeId) => {
+      const service = new google.maps.places.PlacesService(map);
+      dispatch(setRestaurant(null));
+
+      const request = {
+        placeId,
+        fields: ['name', 'opening_hours', 'formatted_address', 'formatted_phone_number']
+      };
+
+      service.getDetails(request, (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          dispatch(setRestaurant(place));
+        }
+      });
+    },
+    [google, map, dispatch]
+  );
+
+  const searchByQuery = useCallback(
+    (query) => {
+      const service = new google.maps.places.PlacesService(map);
+      dispatch(setRestaurant([]));
+
+      const request = {
+        location: map.center,
+        radius: '200',
+        type: ['restaurant'],
+        query
+      };
+
+      service.textSearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          dispatch(setRestaurants(results));
+        }
+      });
+    },
+    [dispatch, google, map]
+  );
+
   useEffect(() => {
     if (query) {
-      searchByQuery(query);
+      searchByQuery(map, query);
     }
-  }, [query]);
+  }, [searchByQuery, query, map]);
 
   useEffect(() => {
     if (placeId) {
       getRestaurantById(placeId);
     }
-  }, [placeId]);
-
-  function getRestaurantById(placeId) {
-    const service = new google.maps.places.PlacesService(map);
-    dispatch(setRestaurant(null));
-
-    const request = {
-      placeId,
-      fields: ['name', 'opening_hours', 'formatted_address', 'formatted_phone_number']
-    };
-
-    service.getDetails(request, (place, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        dispatch(setRestaurant(place));
-      }
-    });
-  }
-
-  function searchByQuery(query) {
-    const service = new google.maps.places.PlacesService(map);
-    dispatch(setRestaurant([]));
-
-    const request = {
-      location: map.center,
-      radius: '200',
-      type: ['restaurant'],
-      query
-    };
-
-    service.textSearch(request, (results, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        dispatch(setRestaurants(results));
-      }
-    });
-  }
+  }, [placeId, getRestaurantById]);
 
   const searchNearby = (map, center) => {
     const service = new google.maps.places.PlacesService(map);

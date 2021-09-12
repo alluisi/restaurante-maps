@@ -91,7 +91,7 @@ const Home = () => {
             <Map query={query} placeId={placeId} />
             <Modal
                 open={modalOpened}
-                onClose={() => setModalOpend(!modalOpened)}>
+                onClose={() => setModalOpened(!modalOpened)}>
                 {restaurantSelected ? (
                     <>
                         <ModalTitle>{restaurantSelected?.name}</ModalTitle>
